@@ -1,0 +1,77 @@
+export RELEASE="2.47.0"
+wget https://github.com/prometheus/prometheus/releases/download/v${RELEASE}/prometheus-${RELEASE}.linux-amd64.tar.gz
+tar xvf prometheus-${RELEASE}.linux-amd64.tar.gz
+cd prometheus-${RELEASE}.linux-amd64/
+
+groupadd --system prometheus
+grep prometheus /etc/group
+useradd -s /sbin/nologin -r -g prometheus prometheus
+
+mkdir -p /etc/prometheus/{alerts,files_sd}  /var/lib/prometheus
+
+cp prometheus promtool /usr/local/bin/
+cp -r consoles/ console_libraries/ /etc/prometheus/
+echo -n "[Unit]
+Description=Prometheus systemd service unit
+Wants=network-online.target
+After=network-online.target
+[Service]
+Type=simple
+User=prometheus
+Group=prometheus
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStart=/usr/local/bin/prometheus \
+--config.file=/etc/prometheus/prometheus.yml \
+--storage.tsdb.path=/var/lib/prometheus \
+--web.console.templates=/etc/prometheus/consoles \
+--web.console.libraries=/etc/prometheus/console_libraries \
+--web.listen-address=0.0.0.0:9090
+SyslogIdentifier=prometheus
+Restart=always
+[Install]
+WantedBy=multi-user.target" | tee /etc/systemd/system/prometheus.service >/dev/null
+
+
+
+echo  -n " # my global config
+global:
+  scrape_interval:     15s # By default, scrape targets every 15 seconds.
+  evaluation_interval: 15s # By default, scrape targets every 15 seconds.
+  # scrape_timeout is set to the global default (10s).
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+      monitor: 'my-project'
+# Load and evaluate rules in this file every 'evaluation_interval' seconds.
+rule_files:
+  - 'alerts/*.yml'
+  #- 'alert.rules'
+  # - "first.rules"
+  # - "second.rules"
+# alert
+alerting:
+  alertmanagers:
+  - scheme: http
+    static_configs:
+    - targets:
+      - "alertmanager:9093"
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: 'NodeExporter'
+    metrics_path: /metrics
+    static_configs:
+         - targets:
+            - 127.0.0.1:9100
+"  | tee   /etc/prometheus/prometheus.yml > /dev/null
+
+
+
+
+ chown -R prometheus:prometheus /etc/prometheus/  /var/lib/prometheus/
+ chmod -R 775 /etc/prometheus/ /var/lib/prometheus/
+ systemctl daemon-reload
+ systemctl start prometheus
+ systemctl enable prometheus
+ systemctl status prometheus
