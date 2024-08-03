@@ -39,7 +39,7 @@ Whether you're just getting started with Prometheus or looking for advanced conf
 
 To get started with the projects in this repository:
 
-1. **Clone the repository:**
+ **Clone the repository:**
 
    ```bash
    git clone https://github.com/khpcoding/Prometheus-projects.git
