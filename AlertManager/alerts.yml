@@ -1,0 +1,237 @@
+groups:
+ - name: Basic resource monitoring
+   rules:
+   - alert: HostOutOfMemory
+     expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 10
+     for: 2m
+     labels:
+        severity: warning
+     annotations:
+        summary: "Host out of memory (instance {{ $labels.instance }})"
+        description: "Node memory is filling up (< 10% left)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+   - alert: HostMemoryUnderMemoryPressure
+     expr: rate(node_vmstat_pgmajfault[1m]) > 1000
+     for: 2m
+     labels:
+       severity: warning
+     annotations:
+       summary: "Host memory under memory pressure (instance {{ $labels.instance }})"
+       description: "The node is under heavy memory pressure. High rate of major page faults\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+   - alert: PrometheusTargetMissing
+     expr: up == 0
+     for: 0m
+     labels:
+       severity: critical
+     annotations:
+       summary: "Prometheus target missing (instance {{ $labels.instance }})"
+       description: "A Prometheus target has disappeared. An exporter might be crashed.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+   - alert: HostUnusualNetworkThroughputIn
+     expr: sum by (instance) (rate(node_network_receive_bytes_total[2m])) / 1024 / 1024 > 100
+     for: 5m
+     labels:
+       severity: warning
+     annotations:
+       summary: "Host unusual network throughput in (instance {{ $labels.instance }})"
+       description: "Host network interfaces are probably receiving too much data (> 100 MB/s)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+   - alert: HostUnusualNetworkThroughputOut
+     expr: sum by (instance) (rate(node_network_transmit_bytes_total[2m])) / 1024 / 1024 > 100
+     for: 5m
+     labels:
+       severity: warning
+     annotations:
+       summary: "Host unusual network throughput out (instance {{ $labels.instance }})"
+       description: "Host network interfaces are probably sending too much data (> 100 MB/s)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+   - alert: HostUnusualDiskReadRate
+     expr: sum by (instance) (rate(node_disk_read_bytes_total[2m])) / 1024 / 1024 > 50
+     for: 5m
+     labels:
+       severity: warning
+     annotations:
+       summary: "Host unusual disk read rate (instance {{ $labels.instance }})"
+       description: "Disk is probably reading too much data (> 50 MB/s)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+   - alert: HostUnusualDiskWriteRate
+     expr: sum by (instance) (rate(node_disk_written_bytes_total[2m])) / 1024 / 1024 > 50
+     for: 2m
+     labels:
+       severity: warning
+     annotations:
+       summary: "Host unusual disk write rate (instance {{ $labels.instance }})"
+       description: "Disk is probably writing too much data (> 50 MB/s)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+   - alert: RedisDown
+     expr: redis_up == 0
+     for: 0m
+     labels:
+       severity: critical
+     annotations:
+       summary: "Redis down (instance {{ $labels.instance }})"
+       description: "Redis instance is down\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+   - alert: NginxHighHttp4xxErrorRate
+     expr: sum(rate(nginx_http_requests_total{status=~"^4.."}[1m])) / sum(rate(nginx_http_requests_total[1m])) * 100 > 5
+     for: 1m
+     labels:
+       severity: critical
+     annotations:
+       summary: "Nginx high HTTP 4xx error rate (instance {{ $labels.instance }})"
+       description: "Too many HTTP requests with status 4xx (> 5%)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+   - alert: NGINX-API-DOWN
+     expr: nginx_connections_active == 0
+     for: 0m
+     labels:
+       severity: critical
+     annotations:
+       summary: "API is Down  (instance {{ $labels.instance }})"
+       description: "Active Conncetion Is 0 \n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+   - alert: NGINX-Total-Req-0
+     expr: nginx_http_requests_total == 0
+     for: 1m
+     labels:
+       severity: critical
+     annotations:
+       summary: "Total Request  is 0  (instance {{ $labels.instance }})"
+       description: "Total Req is  0 \n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+   - alert: HostRaidDiskFailure
+     expr: node_md_disks{state="failed"} > 0
+     for: 2m
+     labels:
+       severity: warning
+     annotations:
+       summary: "Host RAID disk failure (instance {{ $labels.instance }})"
+       description: "At least one device in RAID array on {{ $labels.instance }} failed. Array {{ $labels.md_device }} needs attention and possibly a disk swap\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+   - alert: HostSystemdServiceCrashed
+     expr: node_systemd_unit_state{state="failed"} == 1
+     for: 0m
+     labels:
+       severity: warning
+     annotations:
+       summary: "Host SystemD service crashed (instance {{ $labels.instance }})"
+       description: "SystemD service crashed\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+   - alert: ContainerCpuUsage
+     expr: (sum(rate(container_cpu_usage_seconds_total[3m])) BY (instance, name) * 100) > 80
+     for: 2m
+     labels:
+       severity: warning
+     annotations:
+       summary: "Container CPU usage (instance {{ $labels.instance }})"
+       description: "Container CPU usage is above 80%\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+ 
+   - alert: ContainerVolumeIoUsage
+     expr: (sum(container_fs_io_current) BY (instance, name) * 100) > 80
+     for: 2m
+     labels:
+       severity: warning
+     annotations:
+       summary: "Container Volume IO usage (instance {{ $labels.instance }})"
+       description: "Container Volume IO usage is above 80%\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+   - alert: HostSwapIsFillingUp
+     expr: (1 - (node_memory_SwapFree_bytes / node_memory_SwapTotal_bytes)) * 100 > 80
+     for: 2m
+     labels:
+       severity: warning
+     annotations:
+       summary: "Host swap is filling up (instance {{ $labels.instance }})"
+       description: "Swap is filling up (>80%)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+
+   - alert: HostHighCpuLoad
+     expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[2m])) * 100) > 80
+     for: 0m
+     labels:
+       severity: warning
+     annotations:
+       summary: "Host high CPU load (instance {{ $labels.instance }})"
+       description: "CPU load is > 80%\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+
+   - alert: HostDiskWillFillIn24Hours
+     expr: (node_filesystem_avail_bytes * 100) / node_filesystem_size_bytes < 10 and ON (instance, device, mountpoint) predict_linear(node_filesystem_avail_bytes{fstype!~"tmpfs"}[1h], 24 * 3600) < 0 and ON (instance, device, mountpoint) node_filesystem_readonly == 0
+     for: 2m
+     labels:
+       severity: warning
+     annotations:
+       summary: "Host disk will fill in 24 hours (instance {{ $labels.instance }})"
+       description: "Filesystem is predicted to run out of space within the next 24 hours at current write rate\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+   - alert: HostOutOfInodes
+     expr: node_filesystem_files_free{mountpoint ="/rootfs"} / node_filesystem_files{mountpoint="/rootfs"} * 100 < 10 and ON (instance, device, mountpoint) node_filesystem_readonly{mountpoint="/rootfs"} == 0
+     for: 2m
+     labels:
+       severity: warning
+     annotations:
+       summary: "Host out of inodes (instance {{ $labels.instance }})"
+       description: "Disk is almost running out of available inodes (< 10% left)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+   - alert: HostInodesWillFillIn24Hours
+     expr: node_filesystem_files_free{mountpoint ="/rootfs"} / node_filesystem_files{mountpoint="/rootfs"} * 100 < 10 and predict_linear(node_filesystem_files_free{mountpoint="/rootfs"}[1h], 24 * 3600) < 0 and ON (instance, device, mountpoint) node_filesystem_readonly{mountpoint="/rootfs"} == 0
+     for: 2m
+     labels:
+       severity: warning
+     annotations:
+       summary: "Host inodes will fill in 24 hours (instance {{ $labels.instance }})i"
+       description: "Filesystem is predicted to run out of inodes within the next 24 hours at current write rate\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+   - alert: HostUnusualDiskReadLatency
+     expr: rate(node_disk_read_time_seconds_total[1m]) / rate(node_disk_reads_completed_total[1m]) > 0.1 and rate(node_disk_reads_completed_total[1m]) > 0
+     for: 2m
+     labels:
+       severity: warning
+     annotations:
+       summary: "Host unusual disk read latency (instance {{ $labels.instance }})"
+       description: "Disk latency is growing (read operations > 100ms)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+   - alert: HostUnusualDiskWriteLatency
+     expr: rate(node_disk_write_time_seconds_total[1m]) / rate(node_disk_writes_completed_total[1m]) > 0.1 and rate(node_disk_writes_completed_total[1m]) > 0
+     for: 2m
+     labels:
+       severity: warning
+     annotations:
+       summary: "Host unusual disk write latency (instance {{ $labels.instance }})"
+       description: "Disk latency is growing (write operations > 100ms)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+   - alert: PrometheusConfigurationReloadFailure
+     expr: prometheus_config_last_reload_successful != 1
+     for: 0m
+     labels:
+       severity: warning
+     annotations:
+       summary: "Prometheus configuration reload failure (instance {{ $labels.instance }})"
+       description: "Prometheus configuration reload error\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+   - alert: ping-Local
+     expr: ping{host="217.218.127.127",metric="avg"} > 400
+     for: 2m
+     labels:
+       severity: warning
+     annotations:
+       summary: "ping is more than 400 (instance {{ $labels.instance }})"
+       description: "ping is more than 400  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+   - alert: ping-internte8
+     expr: ping{host="8.8.8.8",metric="avg"} > 400
+     for: 2m
+     labels:
+       severity: warning
+     annotations:
+       summary: "ping is more than 400 (instance {{ $labels.instance }})"
+       description: "ping is more than 400  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+
+   - alert: internet
+     expr: probe_duration_seconds{job="blackbox-ICMP"} == 0 or probe_duration_seconds{job="blackbox-ICMP"} > 0.5
+     for: 30s
+     labels:
+       severity: warning
+     annotations:
+       summary:  "Internet on datacenter is unstable - ICMP Request From {{$labels.instance}} "
+       description:  "Internet on datacenter is unstable - ICMP Request From {{$labels.instance}} VALUE = {{ $value }}\n "
