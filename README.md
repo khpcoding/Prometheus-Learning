@@ -42,5 +42,5 @@ To get started with the projects in this repository:
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/prometheus-projects.git
+   git clone https://github.com/khpcoding/Prometheus-projects.git
    cd prometheus-projects
