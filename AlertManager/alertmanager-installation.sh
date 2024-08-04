@@ -14,39 +14,57 @@ chown alertmanager:alertmanager /usr/local/bin/amtool
 
 echo -n " global:
   resolve_timeout: 1m
-  slack_api_url: 'https://hooks.slack.com/services/XXXXXXXXXXXXXXXXX'
+  slack_api_url: https://hooks.slack.com/services/T05NTU1ME/B07FY/n2tJ0I22zDqiM30D
 route:
-  receiver: 'telegram'
+  group_by: ['job']
+  group_wait: 10s
+  group_interval: 1m
+  repeat_interval: 1m
+  receiver: 'slack-notifications'
   routes:
-    - match:
-        severity: critical
-      receiver: 'slack-notifications'
+  - receiver: uptime
+    match:
+      alertname: uptime
+    repeat_interval: 1m
+  - receiver: bot
+    match:
+      alertname: uptime-bot
+    repeat_interval: 1m
 receivers:
-- name: 'telegram'
-  webhook_configs:
-  - send_resolved: true
-    url: 'http://127.0.0.1:8080'
 - name: 'slack-notifications'
+  slack_configs:
+  - channel: '#bot-prom'
+    api_url: https://hooks.slack.com/services/T05NTU1ME/B07FY/n2tJ0I22zDqiM30D
+    text: >-
+           {{ range .Alerts }}
+              *Alert:* {{ .Annotations.summary }} - `{{ .Labels.severity }}`
+              *Message:* {{ .Annotations.description }}
+           {{ end }}
+- name: uptime
   slack_configs:
   - send_resolved: true
     http_config: {}
-    api_url: 'https://hooks.slack.com/services/XXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-    channel: '#monitoring'
-    username: '{{ template "slack.default.username" . }}'
+    api_url: https://hooks.slack.com/services/T05NTU1ME/B07FY/n2tJ0I22zDqiM30D
+    channel: 'bot-prom'
+    username: prometheus
     color: '{{ if eq .Status "firing" }}danger{{ else }}good{{ end }}'
     title: '{{ template "slack.default.title" . }}'
     title_link: '{{ template "slack.default.titlelink" . }}'
     pretext: '{{ template "slack.default.pretext" . }}'
-    text: |-
-      {{ range .Alerts }}
-         *Alert:* {{ .Annotations.summary }} - `{{ .Labels.severity }}`
-         *Message:* {{ .Annotations.message }}
-      {{ end }}
+    text: >-
+           {{ range .Alerts }}
+              *Alert:* {{ .Annotations.summary }} - `{{ .Labels.severity }}`
+              *Message:* {{ .Annotations.description }}
+           {{ end }}
     footer: '{{ template "slack.default.footer" . }}'
     fallback: '{{ template "slack.default.fallback" . }}'
     callback_id: '{{ template "slack.default.callbackid" . }}'
     icon_emoji: '{{ template "slack.default.iconemoji" . }}'
-    icon_url: '{{ template "slack.default.iconurl" . }}' " > /etc/alertmanager/alertmanager.yml
+    icon_url: '{{ template "slack.default.iconurl" . }}'
+- name: bot
+  webhook_configs:
+  - send_resolved: true
+    url: http://alertmanager-bot:8080 " > /etc/alertmanager/alertmanager.yml
 
 echo -n "[Unit]
 Description=Alertmanager
