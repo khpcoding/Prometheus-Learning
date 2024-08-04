@@ -1,3 +1,4 @@
+# Installation Prometheus with bashscript
 export RELEASE="2.47.0"
 wget https://github.com/prometheus/prometheus/releases/download/v${RELEASE}/prometheus-${RELEASE}.linux-amd64.tar.gz
 tar xvf prometheus-${RELEASE}.linux-amd64.tar.gz
