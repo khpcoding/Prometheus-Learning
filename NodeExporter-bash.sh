@@ -1,3 +1,4 @@
+# Installation node exporter with bashscript
 export RELEASE="1.8.2"
 wget https://github.com/prometheus/node_exporter/releases/download/v$RELEASE/node_exporter-$RELEASE.linux-386.tar.gz
 tar xzf node_exporter-$RELEASE.linux-386.tar.gz
