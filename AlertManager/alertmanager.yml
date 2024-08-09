@@ -1,0 +1,39 @@
+global:
+  resolve_timeout: 1m
+
+route:
+  group_by: ['alertname', 'severity']
+  group_wait: 30s
+  group_interval: 1m
+  repeat_interval: 1h
+  receiver: 'slack-notifications'
+
+receivers:
+- name: 'slack-notifications'
+  slack_configs:
+  - channel: '#MyChannel'
+    send_resolved: true
+    api_url: 'https://hooks.slack.com/services/T05NTU1MEG7/UBmFKk3yV98yi86'  # Provide a default value or use the environment variable
+    username: 'Alertmanager'
+    title: '{{ .CommonAnnotations.summary }}'
+    title_link: '{{ .CommonAnnotations.runbook_url }}'
+    text: >
+      {{ range .Alerts }}
+        *Alert:* {{ .Annotations.summary }}
+        *Severity:* {{ .Labels.severity }}
+        {{ if eq .Status "firing" }}
+        *Message:* {{ .Annotations.description }}
+        {{ else if eq .Status "resolved" }}
+        *Resolved:* The alert has been resolved.
+        {{ end }}
+      {{ end }}
+    footer: '{{ .CommonLabels.alertname }}'
+    color: '{{ if eq .Status "firing" }}danger{{ else }}good{{ end }}'
+    icon_emoji: ':bell:'
+
+inhibit_rules:
+- source_match:
+    severity: 'critical'
+  target_match:
+    severity: 'warning'
+  equal: ['alertname', 'job']
