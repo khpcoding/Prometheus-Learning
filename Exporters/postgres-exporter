@@ -1,0 +1,41 @@
+#installation postgres exporter
+
+RELEASE=0.13.2
+DATA_SOURCE_NAME="postgresql://postgres_exporter:password@localhost:5432/?sslmode=disable"
+
+wget https://github.com/prometheus-community/postgres_exporter/releases/download/v$RELEASE/postgres_exporter-$RELEASE.linux-amd64.tar.gz
+tar -xzvf postgres_exporter-$RELEASE.linux-amd64.tar.gz
+cp postgres_exporter-$RELEASE.linux-amd64/postgres_exporter /usr/local/bin && rm -rf postgres_exporter-$RELEASE.linux-amd64
+
+sudo useradd -rs /bin/false postgres-exp
+
+curl -k "https://raw.githubusercontent.com/farshadnick/prometheus-stack-installation-bashscript/main/postgres/query.yml" -o /etc/query.yml
+chown postgres-exp:postgres-exp  /etc/query.yml
+
+
+
+mkdir  -p  /opt/postgres_exporter/
+echo "DATA_SOURCE_NAME=postgresql://postgres_exporter:password@localhost:5432/postgres?sslmode=disable"    >  /opt/postgres_exporter/postgres_exporter.env
+
+# /etc/systemd/system/postgres_exporter.service
+
+
+[Unit]
+Description=Prometheus exporter for Postgresql
+Wants=network-online.target
+After=network-online.target
+[Service]
+User=postgres-exp
+Group=postgres-exp
+WorkingDirectory=/opt/postgres_exporter
+EnvironmentFile=/opt/postgres_exporter/postgres_exporter.env
+ExecStart=/usr/local/bin/postgres_exporter --web.listen-address=:9187 --web.telemetry-path=/metrics  --extend.query-path=/etc/query.yml
+Restart=always
+[Install]
+WantedBy=multi-user.target
+
+
+sudo systemctl daemon-reload
+sudo systemctl start postgres_exporter
+sudo systemctl enable postgres_exporter
+sudo systemctl status postgres_exporter
