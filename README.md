@@ -1,4 +1,4 @@
-# Prometheus-Projects
+# Prometheus-Learning
 
 ![Prometheus](https://img.shields.io/badge/Prometheus-Monitoring-orange?style=flat&logo=prometheus)
 
