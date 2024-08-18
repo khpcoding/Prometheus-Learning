@@ -23,6 +23,10 @@ Prometheus scrapes the metrics from Pushgateway.
 - Metrics Storage:
 Metrics are stored in Prometheus and can be queried and visualized.
 
+
+![Pushgateway Overview](https://miro.medium.com/v2/resize:fit:720/format:webp/1*mhMKB_iWA2Kz6L0qTT_i9w.png)
+
+
 ## Setup and Example
 Here’s a step-by-step guide to set up Pushgateway and test it with a simple example.
 
