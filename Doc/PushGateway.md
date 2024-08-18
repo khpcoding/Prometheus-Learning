@@ -16,12 +16,9 @@ Metrics from jobs that are transient in nature and may not be available at scrap
 
 ## How It Works
 
-1-Push Metrics:
-
+- Push Metrics:
 Jobs push their metrics to Pushgateway.
-2- Prometheus Scrapes:
-
+- Prometheus Scrapes:
 Prometheus scrapes the metrics from Pushgateway.
-3-Metrics Storage:
-
+- Metrics Storage:
 Metrics are stored in Prometheus and can be queried and visualized.
