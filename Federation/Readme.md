@@ -1,5 +1,3 @@
-![ChatGPT Image Apr 17, 2025, 02_07_23 PM](https://github.com/user-attachments/assets/dca8cfec-3446-494b-b122-ff349fe3c562)# Prometheus Federation Guide
-
 ## 📖 Table of Contents
 - [Overview](#overview)
 - [What is Federation in Prometheus?](#what-is-federation-in-prometheus)
@@ -34,7 +32,8 @@ Federation is useful when you want to:
 
 ## ❓ Why Use Federation?
 
-![ChatGPT Image Apr 17, 2025, 02_07_23 PM](https://github.com/user-attachments/assets/15ef3ce0-58f8-43c9-9f02-d117aecacb87)
+![ChatGPT Image Apr 17, 2025, 02_30_06 PM](https://github.com/user-attachments/assets/a4c75d48-58fe-42ea-bbbd-76a90f4dfb10)
+
 
 
 
