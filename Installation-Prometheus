@@ -1,5 +1,5 @@
 # Installation Prometheus with bashscript
-export RELEASE="2.47.0"
+export RELEASE="3.3.0"
 wget https://github.com/prometheus/prometheus/releases/download/v${RELEASE}/prometheus-${RELEASE}.linux-amd64.tar.gz
 tar xvf prometheus-${RELEASE}.linux-amd64.tar.gz
 cd prometheus-${RELEASE}.linux-amd64/
@@ -26,7 +26,8 @@ ExecStart=/usr/local/bin/prometheus \
 --storage.tsdb.path=/var/lib/prometheus \
 --web.console.templates=/etc/prometheus/consoles \
 --web.console.libraries=/etc/prometheus/console_libraries \
---web.listen-address=0.0.0.0:9090
+--web.listen-address=0.0.0.0:9090 \
+--storage.tsdb.retention.time= 30d
 SyslogIdentifier=prometheus
 Restart=always
 [Install]
