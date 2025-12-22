@@ -50,7 +50,7 @@ receivers:
     slack_configs:
       - channel: '#blackbox-alerts'
         send_resolved: true
-        api_url: 'https://hooks.slack.com/services/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'
+        api_url: 'https://hooks.slack.com/services/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*'
         icon_emoji: ':warning:'
         username: 'Blackbox Monitor'
         title: '{{ if eq .Status "firing" }}🚨 BLACKBOX ALERT{{ else }}✅ BLACKBOX RESOLVED{{ end }}'
@@ -70,7 +70,7 @@ receivers:
     slack_configs:
       - channel: '#basic-resource-alerts'
         send_resolved: true
-        api_url: 'https://hooks.slack.com/services/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'
+        api_url: 'https://hooks.slack.com/services/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*'
         icon_emoji: ':chart_with_upwards_trend:'
         username: 'Resource Monitor'
         title: '{{ if eq .Status "firing" }}{{ if eq (index .Alerts 0).Labels.severity "critical" }}🔥 CRITICAL{{ else }}⚠️ WARNING{{ end }} RESOURCE ALERT{{ else }}✅ RESOURCE OK{{ end }}'
@@ -108,7 +108,7 @@ receivers:
     slack_configs:
       - channel: '#db-alerts'
         send_resolved: true
-        api_url: 'https://hooks.slack.com/services/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'
+        api_url: 'https://hooks.slack.com/services/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*'
         icon_emoji: ':database:'
         username: 'Database Monitor'
         title: '[{{ .Status | toUpper }}] {{ .CommonLabels.alertname }}'
