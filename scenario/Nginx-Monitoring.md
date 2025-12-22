@@ -132,4 +132,4 @@ These dashboards display key metrics such as:
 - Requests per second: `rate(nginx_http_requests_total[5m])`
 
 You now have complete NGINX monitoring with request counts, error rates, and more visible in Grafana!
-```
+  
