@@ -1,4 +1,3 @@
-```
 # Installation Prometheus with bashscript
 export RELEASE="3.3.0"
 wget https://github.com/prometheus/prometheus/releases/download/v${RELEASE}/prometheus-${RELEASE}.linux-amd64.tar.gz
@@ -78,4 +77,4 @@ scrape_configs:
  systemctl start prometheus
  systemctl enable prometheus
  systemctl status prometheus
- ```
+ 
