@@ -5,16 +5,16 @@ In this scenario, we will install NGINX on a server, along with the NGINX Promet
 
 ## Step 1: Install NGINX
 
-```bash
+
 sudo apt update
 sudo apt install nginx -y
-```
+
 
 ## Step 2: Install NGINX Prometheus Exporter
 
 The official NGINX Prometheus Exporter can be downloaded from GitHub releases:
 
-```bash
+
 # Download the latest version (replace with the current latest version)
 wget https://github.com/nginxinc/nginx-prometheus-exporter/releases/download/v1.3.0/nginx-prometheus-exporter_1.3.0_linux_amd64.tar.gz
 
@@ -24,7 +24,7 @@ sudo mv nginx-prometheus-exporter /usr/local/bin/
 
 # Make it executable
 sudo chmod +x /usr/local/bin/nginx-prometheus-exporter
-```
+
 
 Run the exporter (typically on port 9113):
 
