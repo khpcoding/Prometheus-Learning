@@ -1,4 +1,3 @@
-```markdown
 # Nginx + Prometheus + Grafana Monitoring Setup
 
 In this scenario, we will install NGINX on a server, along with the NGINX Prometheus Exporter. We will then configure Prometheus to scrape it, and finally display useful metrics in Grafana — such as the total number of requests sent to the web server, 4xx errors, and 5xx errors.
