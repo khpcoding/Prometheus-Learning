@@ -16,15 +16,20 @@ The official NGINX Prometheus Exporter can be downloaded from GitHub releases:
 
 
 # Download the latest version (replace with the current latest version)
+```bash
 wget https://github.com/nginxinc/nginx-prometheus-exporter/releases/download/v1.3.0/nginx-prometheus-exporter_1.3.0_linux_amd64.tar.gz
+```
 
 # Extract and move the binary
+```bash
 tar -xzf nginx-prometheus-exporter_*.tar.gz
 sudo mv nginx-prometheus-exporter /usr/local/bin/
+```
 
 # Make it executable
+```bash
 sudo chmod +x /usr/local/bin/nginx-prometheus-exporter
-
+```
 
 Run the exporter (typically on port 9113):
 
