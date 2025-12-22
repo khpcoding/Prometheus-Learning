@@ -1,6 +1,6 @@
 # ALERTMANAGER Installation 
 
-export VERSION=0.26.0
+export VERSION=0.30.0
 wget https://github.com/prometheus/alertmanager/releases/download/v${VERSION}/alertmanager-${VERSION}.linux-amd64.tar.gz
 tar -xvf alertmanager-${VERSION}.linux-amd64.tar.gz
 cp alertmanager-${VERSION}.linux-amd64/alertmanager /usr/local/bin/
