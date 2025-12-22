@@ -5,9 +5,10 @@ In this scenario, we will install NGINX on a server, along with the NGINX Promet
 
 ## Step 1: Install NGINX
 
-
+```bash
 sudo apt update
 sudo apt install nginx -y
+```
 
 
 ## Step 2: Install NGINX Prometheus Exporter
