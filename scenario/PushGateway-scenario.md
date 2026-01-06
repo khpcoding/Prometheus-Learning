@@ -209,4 +209,9 @@ After running the backup script a few times, you should see the `backup_status` 
 
 You can now build graphs, dashboards, or alerting rules based on this metric (e.g., alert when `backup_status == 0`).
 
+<img width="1906" height="723" alt="Screenshot 2026-01-06 at 10 41 50 PM" src="https://github.com/user-attachments/assets/9cf851b4-8098-4e49-86c7-6c24563fe9cb" />
+
+<img width="1894" height="863" alt="Screenshot 2026-01-06 at 10 41 35 PM" src="https://github.com/user-attachments/assets/f6dd26b0-b9f9-4a26-ad2b-224ecd252b43" />
+
+
 
