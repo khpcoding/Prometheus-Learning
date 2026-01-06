@@ -92,11 +92,11 @@ Paste the **complete** script below:
 
 ```bash
 #!/bin/bash
-DB_NAME="baackup_demo"
+DB_NAME="backup_demo"
 BACKUP_DIR="/opt/pushgw/bk"
 BACKUP_FILE="$BACKUP_DIR/${DB_NAME}-$(date +%Y%m%d-%H%M%S).sql"
 MYSQL_USER="root"
-MYSQL_PASS="khp@1377"                  # Correct password
+MYSQL_PASS="push@123"                  # Correct password
 
 # Create backup directory if it doesn't exist
 mkdir -p "$BACKUP_DIR"
