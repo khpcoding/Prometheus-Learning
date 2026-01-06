@@ -1,4 +1,3 @@
-```markdown
 # Prometheus Push Gateway Scenario: Monitoring MySQL Database Backup Status
 
 ## Introduction
