@@ -92,32 +92,37 @@ Paste the **complete** script below:
 
 ```bash
 #!/bin/bash
-# backup_mysql.sh - Backs up MySQL database and pushes success/failure status to Push Gateway
-
-DB_NAME="backup_demo"
-BACKUP_DIR="/path/to/backup/folder"  # Change this to a real path, e.g., /home/youruser/mysql_backups
+DB_NAME="baackup_demo"
+BACKUP_DIR="/opt/pushgw/bk"
 BACKUP_FILE="$BACKUP_DIR/${DB_NAME}-$(date +%Y%m%d-%H%M%S).sql"
 MYSQL_USER="root"
-MYSQL_PASS="push@123"
+MYSQL_PASS="khp@1377"                  # Correct password
 
 # Create backup directory if it doesn't exist
 mkdir -p "$BACKUP_DIR"
 
-# Attempt to take backup and set STATUS based on result
-if mysqldump -u "$MYSQL_USER" -p"$MYSQL_PASS" "$DB_NAME" > "$BACKUP_FILE" 2>/dev/null; then
-    STATUS=1  # Success
+# Attempt backup and determine status
+if mysqldump -u "$MYSQL_USER" -p"$MYSQL_PASS" --single-transaction --quick "$DB_NAME" > "$BACKUP_FILE" 2>/dev/null; then
+    STATUS=1
+    echo "Backup successful (status: 1)"
 else
-    STATUS=0  # Failure
+    STATUS=0
+    echo "Backup failed (status: 0)"
 fi
 
-# Push metric to Push Gateway
-PUSH_GATEWAY_URL="http://localhost:9091"  # Adjust if Push Gateway runs on a different host/port
+# Push metric to Pushgateway
+PUSH_GATEWAY_URL="http://127.0.0.1:9091"
 METRIC_NAME="backup_status"
 JOB_NAME="mysql_backup"
+INSTANCE="prometheus-server"           
 
-# Push the metric (including TYPE declaration for correctness)
-echo "# TYPE $METRIC_NAME gauge" | curl --data-binary @- "$PUSH_GATEWAY_URL/metrics/job/$JOB_NAME"
-echo "$METRIC_NAME $STATUS" | curl --data-binary @- "$PUSH_GATEWAY_URL/metrics/job/$JOB_NAME"
+cat <<EOF | curl --data-binary @- "$PUSH_GATEWAY_URL/metrics/job/$JOB_NAME/instance/$INSTANCE"
+# TYPE $METRIC_NAME gauge
+# HELP $METRIC_NAME Status of the last MySQL backup attempt (1 = success, 0 = failure)
+$METRIC_NAME $STATUS
+EOF
+
+echo "Metric pushed: $METRIC_NAME = $STATUS"
 ```
 
 Make the script executable:
