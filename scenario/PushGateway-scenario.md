@@ -156,10 +156,31 @@ Add the following line (replace with the full path to your script):
 
 ## Step 5: Run the Prometheus Push Gateway
 
-Start the Push Gateway using Docker:
+Start the Push Gateway using Docker Compose:
 
 ```bash
-docker run -d -p 9091:9091 --name pushgateway prom/pushgateway
+services:
+  pushgateway:
+    image: prom/pushgateway:latest
+    container_name: pushgateway
+    restart: unless-stopped
+    ports:
+      - "9091:9091"
+    volumes:
+      - pushgateway-data:/pushgateway
+    command:
+      - '--persistence.file=/pushgateway/pushgateway.data'
+      - '--persistence.interval=5m'
+      - '--log.level=info'
+    networks:
+      - monitoring
+
+volumes:
+  pushgateway-data:
+
+networks:
+  monitoring:
+    name: monitoring
 ```
 
 Verify it is accessible at:
