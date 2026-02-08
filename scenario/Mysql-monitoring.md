@@ -63,7 +63,7 @@ volumes:
 
 ### 2. Quick Start Commands
 
-```bash
+
 # 1. (Optional) Create .env file for passwords (better security)
 # .env
 MYSQL_ROOT_PASSWORD=super_secure_root_pass_2026
@@ -83,22 +83,21 @@ curl -s http://localhost:9104/metrics | head -n 30
 
 # 5. Stop & clean up (if needed)
 docker compose down -v
-```
+
 
 ### 3. Creating a Minimal Privileged Exporter User (Recommended in Production)
 
 Run this once MySQL is running:
 
-```sql
+
 -- Connect to MySQL (docker exec or mysql client)
 CREATE USER 'exporter'@'%' IDENTIFIED BY 'exporter_secure_2026!';
 GRANT PROCESS, REPLICATION CLIENT, SELECT ON *.* TO 'exporter'@'%';
 FLUSH PRIVILEGES;
-```
+
 
 Then update the exporter command:
 
-```yaml
     command:
       - --mysqld.address=mysql:3306
       - --mysqld.username=exporter
@@ -109,7 +108,7 @@ Then update the exporter command:
       # environment:
       #   MYSQLD_EXPORTER_PASSWORD: ${MYSQL_EXPORTER_PASSWORD}
       # command: ... --mysqld.password=${MYSQLD_EXPORTER_PASSWORD} ...
-```
+
 
 ### 4. Common Errors & Fixes
 
