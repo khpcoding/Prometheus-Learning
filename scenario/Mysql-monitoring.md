@@ -1,6 +1,6 @@
-```markdown
 ## Installation & Usage Guide – MySQL Exporter (mysqld_exporter)
 
+```markdown
 ### Important Notes (2026)
 - Latest version: **prom/mysqld-exporter:v0.18.0** (released Sep 2025)
 - The old `DATA_SOURCE_NAME` environment variable is **no longer supported** → it is silently ignored.
