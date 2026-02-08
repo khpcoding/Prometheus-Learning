@@ -37,6 +37,39 @@ The setup exposes hundreds of useful MySQL metrics such as:
 
 1. Clone the repository
 
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/mysql-prometheus-monitoring.git
-   cd mysql-prometheus-monitoring
+2. ```bash
+   cp .env.example .env
+   ```
+
+   Edit .env and set secure passwords:env
+
+```bash
+
+MYSQL_ROOT_PASSWORD=your_root_password_here
+MYSQL_DATABASE=monitoring_demo
+MYSQL_USER=app_user
+MYSQL_PASSWORD=app_user_password
+
+# Exporter user (minimal privileges)
+MYSQL_EXPORTER_USER=exporter
+MYSQL_EXPORTER_PASSWORD=very_secure_exporter_pass_2026
+```
+
+3. Start the stack
+
+```bash
+docker compose up -d
+```
+
+4.Check that everything is running:
+
+MySQL: http://localhost:3306 (use client tool)
+mysqld_exporter metrics: http://localhost:9104/metrics
+Prometheus: http://localhost:9090
+Grafana: http://localhost:3000 (admin/admin → change password)
+
+In Grafana:
+Add Prometheus data source → http://prometheus:9090
+Import dashboard (ID 14262 or use the one in ./grafana/dashboards/)
+   
+
