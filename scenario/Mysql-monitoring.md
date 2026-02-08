@@ -11,7 +11,7 @@
 
 ### 1. Recommended docker-compose.yml (minimal & secure)
 
-```yaml
+
 version: "3.9"
 
 services:
@@ -58,7 +58,8 @@ services:
 
 volumes:
   mysql-data:
-```
+
+
 
 ### 2. Quick Start Commands
 
