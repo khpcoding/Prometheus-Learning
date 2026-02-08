@@ -61,8 +61,7 @@ MYSQL_EXPORTER_PASSWORD=very_secure_exporter_pass_2026
 docker compose up -d
 ```
 
-4.Check that everything is running:
-
+Check that everything is running:
 MySQL: http://localhost:3306 (use client tool)
 mysqld_exporter metrics: http://localhost:9104/metrics
 Prometheus: http://localhost:9090
