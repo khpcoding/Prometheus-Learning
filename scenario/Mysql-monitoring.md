@@ -62,13 +62,19 @@ docker compose up -d
 ```
 
 Check that everything is running:
+
 MySQL: http://localhost:3306 (use client tool)
+
 mysqld_exporter metrics: http://localhost:9104/metrics
+
 Prometheus: http://localhost:9090
+
 Grafana: http://localhost:3000 (admin/admin → change password)
 
 In Grafana:
+
 Add Prometheus data source → http://prometheus:9090
+
 Import dashboard (ID 14262 or use the one in ./grafana/dashboards/)
    
 
